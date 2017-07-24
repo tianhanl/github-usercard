@@ -15,4 +15,7 @@ npm run dev
 npm run build
 ```
 
+## Demo
+[Live Demo](https://tianhanl.github.io/github-usercard/);
+
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

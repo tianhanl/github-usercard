@@ -1,9 +1,17 @@
 <template>
   <div id="app">
-    <h1>Demo for UserCard for GitHub</h1>
-    <input type="text" v-model="username" placeholder="Please input your username">
-    <button @click="update">update</button>
-    <usercard :username="cardUsername"></usercard>
+    <h1>Demo for GitHub Usercard</h1>
+    <div class="app-console">
+      <p>Plase input your username bellow to see how it works</p>
+      <input type="text" v-model="username" placeholder="Please input your username">
+      <button @click="update">update</button>
+    </div>
+    <div class="app-component-display">
+  
+      <usercard :username="cardUsername"></usercard>
+  
+    </div>
+  
   </div>
 </template>
 
@@ -16,9 +24,8 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      username: '',
-      cardUsername: ''
+      username: 'tianhanl',
+      cardUsername: 'tianhanl'
     }
   },
   methods: {
@@ -56,5 +63,15 @@ li {
 
 a {
   color: #42b983;
+}
+
+.app-console {
+  margin: 2rem;
+}
+
+.app-component-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
