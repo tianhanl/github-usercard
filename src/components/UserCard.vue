@@ -1,6 +1,6 @@
 <template>
   <div class="g-usercard">
-    <img alt="user avatar" class="g-usercard-avatar">
+    <img :src="avatar_url" alt="user avatar" class="g-usercard-avatar">
     <div class="g-usercard-content">
       <h2 class="g-usercard-name">
         <a :href="userPageUrl">
@@ -72,7 +72,7 @@ export default {
         this.followers = data.followers;
       } else {
         axios
-          .get('https://api.github.com/' + username)
+          .get('https://api.github.com/users/' + username)
           // user arrow function to solve the problem with this
           .then(response => {
             let data = response.data;
