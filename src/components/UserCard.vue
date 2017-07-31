@@ -1,13 +1,15 @@
 <template>
-  <div class="g-usercard">
-    <img :src="avatar_url" alt="user avatar" class="g-usercard-avatar">
+  <div class="g-usercard" :class="{lite:isLite}">
+    <div class="g-usercard-avatar-container">
+      <img :src="avatar_url" alt="user avatar" class="g-usercard-avatar">
+    </div>
     <div class="g-usercard-content">
       <h2 class="g-usercard-name">
         <a :href="userPageUrl">
           {{name}}
         </a>
       </h2>
-      <span class="g-usercard-bio">{{bio}}</span>
+      <p class="g-usercard-bio">{{bio}}</p>
       <section class="g-usercard-repo">
         <a :href="userRepoUrl">{{publicRepos}}</a>
         <h4>Repos</h4>
@@ -26,8 +28,11 @@ export default {
   props: {
     username: {
       type: String,
-      required: true,
-      default: 'tianhanl'
+      required: true
+    },
+    theme: {
+      type: String,
+      default: 'lite'
     }
   },
   created() {
@@ -52,6 +57,9 @@ export default {
     },
     userFollowerUrl: function () {
       return `https://github.com/${this.username}?tab=followers`
+    },
+    isLite: function () {
+      return this.theme === 'lite';
     }
   },
   watch: {
@@ -98,69 +106,103 @@ export default {
 </script>
 <style>
 .g-usercard {
-  padding: 1rem 1rem 1.5rem 1rem;
-  width: 300px;
-  overflow: hidden;
-  text-align: right;
+  /* overflow: hidden; */
+  text-align: left;
   box-sizing: border-box;
-  border: 1px solid;
+  display: flex;
+  border: 1px solid #526273;
+  color: #2C3E50;
 }
 
 .g-usercard a {
   text-decoration: none;
   transition: all 0.1s;
+  color: #42B983;
 }
 
 .g-usercard a:hover {
-  color: #349167;
+  color: #2C7A57;
 }
 
 .g-usercard-content {
-  margin-top: 1rem;
+  box-sizing: border-box;
 }
 
-.g-usercard-avatar {
+
+
+
+
+
+
+
+
+
+
+/* for lite theme */
+
+.g-usercard.lite {
+  width: 400px;
   height: 200px;
-  width: auto;
 }
 
-.g-usercard-name {
+.g-usercard.lite h4 {
+  margin: 0;
+  padding: 0;
+}
+
+.g-usercard.lite .g-usercard-content {
+  flex: 2 2 66%;
+  padding: 1rem 1rem 1rem 1.5rem;
+}
+
+.g-usercard.lite .g-usercard-avatar-container {
+  flex: 1 1 33%;
+}
+
+.g-usercard.lite .g-usercard-avatar {
+  width: 100%;
+  height: auto;
+}
+
+.g-usercard.lite .g-usercard-name {
   font-size: 2rem;
   margin: 0;
   padding: 0;
 }
 
-.g-usercard-bio {}
-
-
-.g-usercard-repo {
-  margin-top: 2rem;
+.g-usercard.lite .g-usercard-bio {
+  margin: 0;
+  margin-bottom: 2em;
+  padding: 0;
 }
 
-.g-usercard-repo a {
+
+.g-usercard.lite .g-usercard-repo {
+  width: 49%;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.g-usercard.lite .g-usercard-repo a {
   font-size: 1.5rem;
   padding: 0;
 }
 
-.g-usercard-repo h4 {
-  margin: -0.3rem;
-  padding: 0;
+.g-usercard.lite .g-usercard-repo h4 {
   font-weight: normal;
 }
 
-.g-usercard-follower {
-  margin-top: 1.5rem;
+.g-usercard.lite .g-usercard-follower {
+  width: 49%;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
-.g-usercard-follower a {
+.g-usercard.lite .g-usercard-follower a {
   font-size: 1.5rem;
-  padding: 0;
-  margin: 0;
 }
 
-.g-usercard-follower h4 {
-  margin: -0.3rem;
-  padding: 0;
+.g-usercard.lite .g-usercard-follower h4 {
   font-weight: normal;
 }
 </style>
