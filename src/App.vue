@@ -7,8 +7,10 @@
       <button @click="update">update</button>
     </div>
     <div class="app-component-display">
-  
-      <usercard :username="cardUsername"></usercard>
+      <section>
+        <h2>Lite</h2>
+        <usercard :username="cardUsername"></usercard>
+      </section>
   
     </div>
   
@@ -73,5 +75,9 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.app-component-display h2 {
+  text-align: left;
 }
 </style>
