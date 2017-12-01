@@ -11,10 +11,10 @@
       </h2>
       <p class="g-usercard-bio">{{bio}}</p>
       <section class="g-usercard-email">
-
+        <a :href="userEmailUrl">{{email}}</a>
       </section>
       <section class="g-usercard-website">
-
+        <a :href="website">{{website}}</a>
       </section>
       <div v-if="!theme==='lite'" class="g-usercard-flex-horizontal equal">
         <section class="g-usercard-repo">
@@ -53,18 +53,23 @@ export default {
       bio: '',
       publicRepos: 0,
       followers: 0,
+      email: '',
+      website: '',
       users: {}
     };
   },
   computed: {
-    userPageUrl: function() {
+    userPageUrl() {
       return 'https://github.com/' + this.username;
     },
-    userRepoUrl: function() {
+    userRepoUrl() {
       return `https://github.com/${this.username}?tab=repositories`;
     },
-    userFollowerUrl: function() {
+    userFollowerUrl() {
       return `https://github.com/${this.username}?tab=followers`;
+    },
+    userEmailUrl() {
+      return `mailto:${this.email}`;
     }
   },
   watch: {
@@ -83,18 +88,23 @@ export default {
         this.bio = data.bio;
         this.publicRepos = data.public_repos;
         this.followers = data.followers;
+        this.email = data.email;
+        this.website = data.blog;
       } else {
         axios
-          .get('https://api.github.com/users/' + username)
+          .get(`https://api.github.com/users/${username}`)
           // user arrow function to solve the problem with this
           .then(response => {
             let data = response.data;
+            console.log(data);
             this.users[username] = data;
             this.name = data.name;
             this.avatar_url = data.avatar_url;
             this.bio = data.bio;
             this.publicRepos = data.public_repos;
             this.followers = data.followers;
+            this.email = data.email;
+            this.website = data.blog;
           })
           .catch(error => {
             console.log(error);
