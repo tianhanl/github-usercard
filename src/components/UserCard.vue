@@ -1,5 +1,5 @@
 <template>
-  <div class="g-usercard" :class="{lite:isLite}">
+  <div class="g-usercard" :class="theme">
     <div class="g-usercard-avatar-container">
       <img :src="avatar_url" alt="user avatar" class="g-usercard-avatar">
     </div>
@@ -10,14 +10,22 @@
         </a>
       </h2>
       <p class="g-usercard-bio">{{bio}}</p>
-      <section class="g-usercard-repo">
-        <a :href="userRepoUrl">{{publicRepos}}</a>
+      <section class="g-usercard-email">
+        <a :href="userEmailUrl">{{email}}</a>
+      </section>
+      <section class="g-usercard-website">
+        <a :href="website">{{website}}</a>
+      </section>
+      <div v-if="!theme==='lite'" class="g-usercard-flex-horizontal equal">
+        <section class="g-usercard-repo">
         <h4>Repos</h4>
+        <a :href="userRepoUrl">{{publicRepos}}</a>
       </section>
       <section class="g-usercard-follower">
-        <a :href="userFollowerUrl">{{followers}}</a>
         <h4>Followers</h4>
+        <a :href="userFollowerUrl">{{followers}}</a>
       </section>
+      </div>
     </div>
   </div>
 </template>
@@ -45,32 +53,34 @@ export default {
       bio: '',
       publicRepos: 0,
       followers: 0,
+      email: '',
+      website: '',
       users: {}
-    }
+    };
   },
   computed: {
-    userPageUrl: function () {
+    userPageUrl() {
       return 'https://github.com/' + this.username;
     },
-    userRepoUrl: function () {
-      return `https://github.com/${this.username}?tab=repositories`
+    userRepoUrl() {
+      return `https://github.com/${this.username}?tab=repositories`;
     },
-    userFollowerUrl: function () {
-      return `https://github.com/${this.username}?tab=followers`
+    userFollowerUrl() {
+      return `https://github.com/${this.username}?tab=followers`;
     },
-    isLite: function () {
-      return this.theme === 'lite';
+    userEmailUrl() {
+      return `mailto:${this.email}`;
     }
   },
   watch: {
-    username: function (newUsername) {
+    username: function(newUsername) {
       this.fetchUserInfo(newUsername);
     }
   },
   methods: {
     fetchUserInfo(username) {
       if (!username) return;
-      console.log('fetching ' + username)
+      console.log('fetching ' + username);
       if (this.users[username]) {
         let data = this.users[username];
         this.name = data.name;
@@ -78,31 +88,32 @@ export default {
         this.bio = data.bio;
         this.publicRepos = data.public_repos;
         this.followers = data.followers;
+        this.email = data.email;
+        this.website = data.blog;
       } else {
         axios
-          .get('https://api.github.com/users/' + username)
+          .get(`https://api.github.com/users/${username}`)
           // user arrow function to solve the problem with this
           .then(response => {
             let data = response.data;
+            console.log(data);
             this.users[username] = data;
             this.name = data.name;
             this.avatar_url = data.avatar_url;
             this.bio = data.bio;
             this.publicRepos = data.public_repos;
             this.followers = data.followers;
+            this.email = data.email;
+            this.website = data.blog;
           })
           .catch(error => {
             console.log(error);
-            this.name = 'Error! User Not Found'
-          })
+            this.name = 'Error! User Not Found';
+          });
       }
     }
   }
-
-
-
-}
-
+};
 </script>
 <style>
 .g-usercard {
@@ -110,39 +121,36 @@ export default {
   text-align: left;
   box-sizing: border-box;
   display: flex;
-  border: 1px solid #526273;
-  color: #2C3E50;
+  color: #2c3e50;
 }
 
 .g-usercard a {
   text-decoration: none;
   transition: all 0.1s;
-  color: #42B983;
+  color: #42b983;
 }
 
 .g-usercard a:hover {
-  color: #2C7A57;
+  color: #2c7a57;
 }
 
 .g-usercard-content {
   box-sizing: border-box;
 }
 
-
-
-
-
-
-
-
-
-
+.g-usercard-flex-horizontal {
+  display: flex;
+}
 
 /* for lite theme */
 
 .g-usercard.lite {
-  width: 400px;
-  height: 200px;
+  width: 229px;
+  height: 400px;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-direction: column;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .g-usercard.lite h4 {
@@ -152,7 +160,7 @@ export default {
 
 .g-usercard.lite .g-usercard-content {
   flex: 2 2 66%;
-  padding: 1rem 1rem 1rem 1.5rem;
+  padding: 1rem;
 }
 
 .g-usercard.lite .g-usercard-avatar-container {
@@ -165,17 +173,16 @@ export default {
 }
 
 .g-usercard.lite .g-usercard-name {
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin: 0;
   padding: 0;
 }
 
 .g-usercard.lite .g-usercard-bio {
   margin: 0;
-  margin-bottom: 2em;
+  margin-bottom: 1.5rem;
   padding: 0;
 }
-
 
 .g-usercard.lite .g-usercard-repo {
   width: 49%;
